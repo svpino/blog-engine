@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" itemscope itemtype="http://schema.org/Article">
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0" />
+
+    {% if page == 'POST' %}    
+        <meta name="title" content="{{ items[0].title }}" />
+        <meta itemprop="name" content="{{ items[0].title }}"> 
+    {% endif %}
+
+    <title>
+        {% if page == 'POST' %}
+            {{ items[0].title }}
+        {% elif page == 'ARCHIVE' or page == 'MONTHLY_ARCHIVE' %}    
+            Archive
+        {% elif page == 'ABOUT' %}    
+            About
+        {% else %}    
+            Home
+        {% endif %} 
+    </title>
+    <style>
+        html { -webkit-font-smoothing: antialiased; }
+        body { font-family: Avant Garde,Avantgarde,Century Gothic,CenturyGothic,AppleGothic,Georgia,Arial,sans-serif; font-size: 18px; line-height: 26px; margin: 0 10px; color: #000;}
+        h1 { font-size: 32px; font-weight: normal; margin: 0; line-height: 38px; }
+        h2 { font-size: 22px; font-weight: normal; }
+        ol li, ul li { margin-top: 10px; }
+        a { color: #4698f2; text-decoration: none; }
+        a:hover { color: #000; text-decoration: underline; }
+        #main { clear: both; margin: 0 auto; max-width: 680px; min-width: 280px; }
+        #content { margin-top: 30px; }
+        #header { height: 30px; margin: 20px 30px 0 0; font-size: 14px; max-width: 1300px; min-width: 260px; }
+        h1 a, footer a, #header a { color: #000; text-decoration: underline; }
+        h1 a:hover, footer a:hover, #header a:hover { color: #4698f2; }
+        h1 a:hover { text-decoration: none; }
+        #links { list-style: none; }
+        #links li { display: block; float: right; margin: 0 0 0 10px; }
+        #footer { clear: both; margin-top: 20px; max-width: 680px; min-width: 280px; font-size: 14px; }
+        #footer a { font-size: 14px; }
+        #copyright { border-top: 1px solid #ccc; height: 100px; margin-top: 50px; padding-top: 10px; text-align: center; line-height: 20px; }
+
+        {% if page == 'ABOUT' %}
+            #about li { margin-top: 6px; }
+            #about div span { color: #757575; }
+        {% elif page == 'ARCHIVE' %}
+            #archive { margin: 0px 0 40px 0; }
+            #archive a { text-decoration: none; color: #000; }
+            #archive a:hover { text-decoration: underline; color: #4698f2; }
+            #archive div { font-size: 18px; line-height: 20px; }
+            #archive ul { list-style: none; }
+            #archive ul.year { padding: 0; }
+            #archive ul.articles { padding-left: 30px; }
+            #archive li { font-size: 16px; margin: 0px; }
+            #archive li.year { font-weight: bold; margin-bottom: 10px; }
+            #archive li.article { font-size: 14px; font-weight: normal; }
+            #archive .date { color: #aaa; }
+        {% elif page == '404' or page == '500' %}
+            #content .error { margin-top: 40px; }
+            #content .error span { font-size: 24px; display: block; }
+        {% else %}
+            h4 { font-size: 18px; font-style: italic; font-weight: normal; margin: 10px 0; color: #aaa; }
+            h4 a { color: #aaa; }
+            pre { overflow: auto; font-size: 13px; line-height: 16px; padding: 10px; font-family: Consolas,Courier New,Courier,monospace; background-color: #F8F8FC; border: 1px solid #ddd; border-radius: 3px; color: #686868; }
+            blockquote { border-left: 2px solid #ccc; padding-left: 20px; margin-left: 40px; }
+            code { font-family: Consolas,Courier New,Courier,monospace; line-height: 14px; word-wrap: break-word; }
+            article h1 a { text-decoration: none; }
+            article .date { color: #aaa; font-size: 14px; }
+            article p:first-of-type { margin-top: 5px; }
+            figure { text-align: center; }
+            figure img { width: 100%; }
+            figcaption { font-size: 12px; line-height: 18px; }
+            #article-footer { border-top: 1px solid #ccc; margin-top: 20px; padding-top: 30px; float: left; }
+            #article-footer .related { margin-top: 20px; }
+            #article-footer .related ul, 
+            #article-footer .related li { margin-top: 0; }
+            #copyright { color: #aaa; }
+            @media screen and (max-width:480px) {
+                h2 { font-size: 18px; }
+                blockquote { padding-left: 10px; margin-left: 10px; }
+                article .date { font-size: 10px; }
+                pre { font-size: 10px; line-height: 12px; }
+            }
+        {% endif %}
+        @media screen and (max-width:480px) {
+            body { font-size: 16px; line-height: 24px; }
+            h1 { font-size: 26px; line-height: 32px; }
+            ol li, ul li { margin-top: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <section id="main">
+        <header id="header">
+            <ul id="links">
+                <li><a href="/archive">archive</a></li>
+                <li><a href="/about">about</a></li>
+            </ul>
+            <div id="title">
+                {% if page == 'HOME' %}
+                    Home
+                {% else %}
+                    <a href="/">&lsaquo; back to home</a>
+                {% endif %}
+            </div>    
+        </header>
+        <section id="content">
+            {% if page == 'HOME' or page == 'POST' or page == 'MONTHLY_ARCHIVE' %}    
+                {% for item in items %}
+                    <article itemscope itemtype="http://schema.org/Article">
+                    <time itemprop="datePublished" content="{{ item.dateTime }}" class="date" datetime="{{ item.dateTime }}">{{ item.formattedLongDate }}</time>
+
+                    {% if page != 'POST' %}
+                        <h1><a href="{{ item.link }}" title="{{ item.summary }}"><span itemprop="name">{{ item.title }}</span></a></h1>
+                    {% else %}
+                        <h1 itemprop="name">{{ item.title }}</h1>
+                    {% endif %}
+
+                    <span itemprop="articleBody">
+                    {{ item.html | safe }}
+                    </span>
+
+                    {% if page == 'POST' %}
+                        <div id="article-footer">
+                            {% if related_articles|length > 0 %}
+                                <div class="related">
+                                    <div class="title">Related posts</div>
+                                    <ul>
+                                        {% for related_article in related_articles %}
+                                            <li><a href="{{ related_article.link }}" title="{{ related_article.summary }}">{{ related_article.title }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            
+                        </div>
+                    {% endif %}
+
+                    </article>
+                {% endfor %}
+            {% elif page == 'ARCHIVE' %}    
+                 <div id="archive">
+                    <h1>Archive</h1>
+                    <div>Lorem ipsum dolor sit amed.</div>
+                    <ul class="year">
+                    {% for section in archive %}
+                        <li class="year">
+                            {{ section.year }}
+                            <ul class="articles">
+                            {% for article in section.articles %}   
+                                <li class="article">
+                                    <time class="date" datetime="{{ article.dateTime }}">{{ article.formattedShortDate }}</time> - <a href='{{ article.url }}' title="{{ article.summary }}">{{ article.title }}</a>
+                                </li>
+                            {% endfor %}            
+                            </ul>
+                        </li>
+                    {% endfor %}    
+                    </ul>    
+                </div>  
+            {% elif page == 'ABOUT' %}
+                <div id="about">
+                    <h1>About</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan sem sed velit suscipit semper. In tempor vulputate suscipit. Pellentesque nec sapien placerat, scelerisque mauris non, auctor orci. Proin ac dui velit. Fusce convallis tincidunt risus vel sagittis. Aliquam erat volutpat. Maecenas neque quam, posuere nec erat sit amet, sodales luctus neque. Nulla feugiat placerat mi et tempus. Nunc convallis neque mauris. Duis malesuada tellus sit amet rhoncus auctor.</p>
+                    <p>Mauris sodales molestie mi, sit amet venenatis diam tempus facilisis. Sed ac ligula magna. Nunc porttitor congue lorem, eget luctus magna vulputate a. Fusce viverra erat orci, et accumsan sapien tincidunt id. Morbi euismod mattis tellus, nec congue metus. Nullam adipiscing varius massa, sed consequat diam tincidunt vel. Ut risus nulla, laoreet mollis porttitor quis, posuere vel nunc. Etiam a mollis arcu. Morbi eu auctor libero. Aliquam erat volutpat. Duis semper non tortor commodo cursus. Integer bibendum est quis dui imperdiet, nec fringilla est eleifend. Nunc id tempor est. Ut molestie laoreet velit quis faucibus.</p>
+                </div>
+
+            {% elif page == '404' %}   
+                <div class="error">
+                    <span>404</span>
+                    Ouch, the page you are looking for is not here.
+                    <br/>
+                    Maybe trying the <a href="/archive">archive</a>?
+                </div> 
+            {% elif page == '500' %}   
+                <div class="error">
+                    <span>500</span>
+                    Ouch, something wrong happened with the server.
+                    <br/>
+                    Maybe trying the <a href="/archive">archive</a> helps?
+                </div>     
+            {% endif %}
+        </section>
+        
+        <footer id="footer">
+            {% if page != 'ARCHIVE' and page != '404' and page != '500' %}
+                <a href="/archive">archive</a>
+            {% endif %}  
+            <div id="copyright">
+                &copy; 2010 - {{ year }}
+            </div>
+
+        </footer>
+    </section>  
+</body>
+</html>

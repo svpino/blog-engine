@@ -1,0 +1,43 @@
+application: blog
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /(.*\.css)$
+  static_files: static/\1
+  upload: static/.*\.css$
+  expiration: "365d"
+  http_headers:
+    Vary: Accept-Encoding
+
+- url: /(.*\.(gif|png|jpg))$
+  static_files: static/images/\1
+  upload: static/images/.*\.(gif|png|jpg)$    
+  expiration: "365d"
+
+- url: /images
+  static_dir: static/images
+
+- url: /favicon\.ico
+  static_files: static/images/favicon.ico
+  upload: static/images/favicon\.ico
+  expiration: "10d"
+
+- url: /robots\.txt
+  static_files: static/robots.txt
+  upload: static/robots\.txt
+
+- url: /static 
+  static_dir: static
+
+- url: /.*
+  script: main.application
+
+libraries:
+- name: webapp2
+  version: latest
+
+- name: jinja2
+  version: 2.6
