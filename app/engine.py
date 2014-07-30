@@ -86,7 +86,7 @@ class ArticleManager:
 
     @staticmethod
     def get_files(filename = '2*.html'):
-        files = MemcacheManager.get("files")
+        files = MemcacheManager.get("files-" + filename)
         if files is None:
             files = sorted(glob.glob('app/templates/articles/*/*/' + filename), reverse=True) 
             index = 0
@@ -94,7 +94,7 @@ class ArticleManager:
                 files[index] = filename[len('app/templates/articles/0000/00/'):]
                 index += 1
 
-            MemcacheManager.add("files", files)
+            MemcacheManager.add("files-" + filename, files)
         
         return files
 
